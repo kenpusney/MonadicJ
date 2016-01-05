@@ -64,13 +64,6 @@ public class WelcomeScreenTest {
     public void should_fail_when_contains_not_allowed_char() throws Exception {
         Customer customer = new Customer("abcdef1*", null);
 
-        assertFalse(screen.validate(customer).valid());
-
-        screen.validate(customer).bind(cust -> {
-            fail();
-            return Optional.empty();
-        });
-
         assertThat(screen.welcome(customer).left(), is("Customer name should not contain special characters"));
     }
 
@@ -78,7 +71,6 @@ public class WelcomeScreenTest {
     public void should_fail_when_length_not_allowed() throws Exception {
         Customer customer = new Customer("abcdefghijklmnopqrstuvwxyz", null);
 
-        assertFalse(screen.validate(customer).valid());
         assertThat(screen.welcome(customer).left(), is("Customer name length must between 4 and 18"));
     }
 }

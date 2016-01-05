@@ -16,16 +16,4 @@ public class WelcomeScreen {
                 .bind(name -> Either.right(String.format("Hello %s", name)));
     }
 
-    public Either<String, Boolean> validate(Customer customer) {
-        String name = customer.getNickName()
-                .or(customer.getName()).value();
-        if (name.length() > 18 || name.length() < 4) {
-            return Either.left("Customer name length must between 4 and 18");
-        } else if (!Character.isAlphabetic(name.charAt(0))) {
-            return Either.left("Customer name must start with letters");
-        } else if (!name.matches("^(\\w|\\d|\\s)+$")) {
-            return Either.left("Customer name should not contain special characters");
-        }
-        return Either.right(true);
-    }
 }
