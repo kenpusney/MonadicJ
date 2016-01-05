@@ -1,17 +1,18 @@
 package net.kimleo.monadic.example;
 
+
+import net.kimleo.monadic.optional.Optional;
+
 public class WelcomeScreen {
 
     public String welcome(Customer customer) {
-        if (customer.getNickName() != null) {
-            return hello(customer.getNickName());
-        } else if (customer.getName() != null) {
-            return hello(customer.getName());
-        }
-        return hello("Anonymous");
+        return nameOf(customer).value();
     }
 
-    private String hello(String name) {
-        return String.format("Hello %s", name);
+    private Optional<String> nameOf(Customer customer) {
+        return customer.getNickName()
+                .or(customer.getName())
+                .map(name -> String.format("Hello %s", name));
     }
+
 }

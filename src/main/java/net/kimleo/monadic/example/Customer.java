@@ -1,21 +1,23 @@
 package net.kimleo.monadic.example;
 
+import net.kimleo.monadic.optional.Optional;
+
+import static net.kimleo.monadic.optional.Optional.of;
+
 public class Customer {
-    final String name;
-    final String nickName;
+    final Optional<String> name;
+    final Optional<String> nickName;
 
     public Customer(String name, String nickName) {
-        this.name = name;
-        this.nickName = nickName;
+        this.name = of(name);
+        this.nickName = of(nickName);
     }
 
-    public String getNickName() {
+    public Optional<String> getNickName() {
         return nickName;
     }
 
-    public String getName() {
+    public Optional<String> getName() {
         return name;
     }
-
-
 }

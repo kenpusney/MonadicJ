@@ -33,7 +33,7 @@ public class WelcomeScreenTest {
     public void should_display_welcome_message_if_customer_noting() throws Exception {
         Customer customer = new Customer(null, null);
 
-        assertThat(screen.welcome(customer), is("Hello Anonymous"));
+        assertNull(screen.welcome(customer));
 
     }
 }
