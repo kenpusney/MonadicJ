@@ -25,8 +25,6 @@ public interface Either<E, T> extends Monad<T> {
 
     Either<E, T> where(E extra, Predicate<T> pred);
 
-    Either<E, T> where(Predicate<T> pred);
-
     class Left<E, T> implements Either<E, T> {
         private final E extra;
 
@@ -59,10 +57,6 @@ public interface Either<E, T> extends Monad<T> {
             return this;
         }
 
-        @Override
-        public Either<E, T> where(Predicate<T> pred) {
-            return this;
-        }
     }
 
     class Right<E, T> implements Either<E, T> {
@@ -100,9 +94,5 @@ public interface Either<E, T> extends Monad<T> {
             return Either.left(extra);
         }
 
-        @Override
-        public Either<E, T> where(Predicate<T> pred) {
-            return where(null, pred);
-        }
     }
 }
