@@ -9,7 +9,7 @@ public class WelcomeScreen {
                 .bind(name -> Either.right(String.format("Hello %s", name)));
     }
 
-    private Either<Object, String> validate(Either<Object, String> nameOfCustomer) {
+    private Either<String, String> validate(Either<String, String> nameOfCustomer) {
         return nameOfCustomer
                 .where("Customer name length must between 4 and 18",
                         name -> name.length() < 19 && name.length() >= 4)
@@ -19,7 +19,7 @@ public class WelcomeScreen {
                         name -> name.matches("^(\\w|\\d|\\s)+$"));
     }
 
-    private Either<Object, String> nameOf(Customer customer) {
+    private Either<String, String> nameOf(Customer customer) {
         return Either.right(customer.getNickName()
                 .or(customer.getName()).value());
     }
