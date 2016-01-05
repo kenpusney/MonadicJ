@@ -1,5 +1,7 @@
 package net.kimleo.monadic.example;
 
+import net.kimleo.monadic.either.Either;
+import net.kimleo.monadic.optional.Optional;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -41,34 +43,43 @@ public class WelcomeScreenTest {
     public void should_success_when_customer_id_starts_with_letter() throws Exception {
         Customer customer = new Customer("Kimmy Leo", "Kimmy");
 
-        assertThat(screen.validate(customer), is(true));
+        assertThat(screen.validate(customer).right(), is(true));
     }
 
     @Test
     public void should_success_when_customer_id_between_4_and_18() throws Exception {
         Customer customer = new Customer("Kimmy Leo", null);
 
-        assertThat(screen.validate(customer), is(true));
+        assertThat(screen.validate(customer).right(), is(true));
     }
 
-    @Test(expected = ValidationException.class)
+    @Test
     public void should_fail_when_start_with_not_allowed_char() throws Exception {
         Customer customer = new Customer("*1abcdef", null);
 
-        screen.validate(customer);
+        assertFalse(screen.validate(customer).valid());
+        assertThat(screen.validate(customer).left(), is("Customer name must start with letters"));
     }
 
-    @Test(expected = ValidationException.class)
+    @Test
     public void should_fail_when_contains_not_allowed_char() throws Exception {
         Customer customer = new Customer("abcdef1*", null);
 
-        screen.validate(customer);
+        assertFalse(screen.validate(customer).valid());
+
+        screen.validate(customer).bind(cust -> {
+            fail();
+            return Optional.empty();
+        });
+
+        assertThat(screen.validate(customer).left(), is("Customer name should not contain special characters"));
     }
 
-    @Test(expected = ValidationException.class)
+    @Test
     public void should_fail_when_length_not_allowed() throws Exception {
         Customer customer = new Customer("abcdefghijklmnopqrstuvwxyz", null);
 
-        screen.validate(customer);
+        assertFalse(screen.validate(customer).valid());
+        assertThat(screen.validate(customer).left(), is("Customer name length must between 4 and 18"));
     }
 }

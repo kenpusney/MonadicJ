@@ -1,19 +1,20 @@
 package net.kimleo.monadic.example;
 
-
+import net.kimleo.monadic.either.Either;
 import net.kimleo.monadic.optional.Optional;
-
-import java.util.regex.Matcher;
 
 public class WelcomeScreen {
 
     public String welcome(Customer customer) {
-        return hello(customer).value();
+        if (validate(customer).right()) {
+            return hello(customer).value();
+        }
+        return null;
     }
 
     private Optional<String> hello(Customer customer) {
         return nameOf(customer)
-                .map(name -> String.format("Hello %s", name));
+                .bind(name -> Optional.of(String.format("Hello %s", name)));
     }
 
     private Optional<String> nameOf(Customer customer) {
@@ -21,15 +22,15 @@ public class WelcomeScreen {
                 .or(customer.getName());
     }
 
-    public boolean validate(Customer customer) throws ValidationException {
+    public Either<String, Boolean> validate(Customer customer) {
         String name = nameOf(customer).value();
         if (name.length() > 18 || name.length() < 4) {
-            throw new ValidationException("Customer name length must between 4 and 18");
-        } else if (name.matches("^\\w")) {
-            throw new ValidationException("Customer name must start with letters");
+            return Either.left("Customer name length must between 4 and 18");
+        } else if (!Character.isAlphabetic(name.charAt(0))) {
+            return Either.left("Customer name must start with letters");
         } else if (!name.matches("^(\\w|\\d|\\s)+$")) {
-            throw new ValidationException("Customer name should not contain special characters");
+            return Either.left("Customer name should not contain special characters");
         }
-        return true;
+        return Either.right(true);
     }
 }
