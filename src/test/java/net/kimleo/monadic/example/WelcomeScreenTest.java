@@ -1,6 +1,5 @@
 package net.kimleo.monadic.example;
 
-import net.kimleo.monadic.optional.Optional;
 import org.junit.Before;
 import org.junit.Test;
 

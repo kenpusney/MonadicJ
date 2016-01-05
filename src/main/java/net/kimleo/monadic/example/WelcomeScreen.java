@@ -23,5 +23,4 @@ public class WelcomeScreen {
         return Either.right(customer.getNickName()
                 .or(customer.getName()).value());
     }
-
 }
