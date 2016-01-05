@@ -5,8 +5,8 @@ import net.kimleo.monadic.optional.Optional;
 import static net.kimleo.monadic.optional.Optional.of;
 
 public class Customer {
-    final Optional<String> name;
-    final Optional<String> nickName;
+    private final Optional<String> name;
+    private final Optional<String> nickName;
 
     public Customer(String name, String nickName) {
         this.name = of(name);

@@ -3,6 +3,7 @@ package net.kimleo.monadic.either;
 import net.kimleo.monadic.Monad;
 
 import java.util.function.Function;
+import java.util.function.Predicate;
 
 public interface Either<E, T> extends Monad<T> {
     @Override
@@ -21,6 +22,10 @@ public interface Either<E, T> extends Monad<T> {
     T right();
 
     boolean valid();
+
+    Either<E, T> where(E extra, Predicate<T> pred);
+
+    Either<E, T> where(Predicate<T> pred);
 
     class Left<E, T> implements Either<E, T> {
         private final E extra;
@@ -48,10 +53,20 @@ public interface Either<E, T> extends Monad<T> {
         public boolean valid() {
             return false;
         }
+
+        @Override
+        public Either<E, T> where(E extra, Predicate<T> pred) {
+            return this;
+        }
+
+        @Override
+        public Either<E, T> where(Predicate<T> pred) {
+            return this;
+        }
     }
 
     class Right<E, T> implements Either<E, T> {
-        private T value;
+        private final T value;
 
         public Right(T value) {
             this.value = value;
@@ -74,7 +89,20 @@ public interface Either<E, T> extends Monad<T> {
 
         @Override
         public boolean valid() {
-            return true;
+            return value != null;
+        }
+
+        @Override
+        public Either<E, T> where(E extra, Predicate<T> pred) {
+            if (valid() && pred.test(value)) {
+                return this;
+            }
+            return Either.left(extra);
+        }
+
+        @Override
+        public Either<E, T> where(Predicate<T> pred) {
+            return where(null, pred);
         }
     }
 }
